@@ -1,0 +1,103 @@
+# adrify — Architecture Decision Records skill
+
+A Claude Code skill for recording and maintaining Architecture Decision Records
+(ADRs) in Michael Nygard's format:
+https://www.cognitect.com/blog_posts/2011/11/15/documenting-architecture-decisions
+
+An ADR is one short markdown file capturing a single architecturally significant
+decision: the **context** that forced it, the **decision** itself, and its
+**consequences**. Records are immutable — when a decision changes, a new record
+supersedes the old one rather than editing it.
+
+The skill prose lives in
+[`dotclaude_folder/skills/adrify/`](dotclaude_folder/skills/adrify); its
+deterministic mechanics live in [`src/`](src) as a small TypeScript CLI.
+
+## What it does
+
+The skill keeps the parts that are easy to get inconsistent — sequential
+numbering, the index, and the Nygard structure — uniform, so you can focus on the
+reasoning. It has three modes, chosen from how you ask:
+
+| You say | Mode | What happens |
+|---|---|---|
+| "set up ADRs", first use in a repo | **scaffold** | Creates the ADR directory with an index, a template, and the `0000` meta-ADR. |
+| "record this decision", "write an ADR for X", `/adrify new` | **interview** | A short, focused Q&A, then writes one record. |
+| "catalog our decisions", "document what we've built", `/adrify backfill` | **backfill** | Fans out subagents to mine existing docs and code, proposes a candidate list for you to curate, then writes the approved records. |
+
+Invoke it by asking Claude in plain language, or with `/adrify`, `/adrify new`,
+`/adrify backfill`.
+
+## Automatic capture going forward
+
+A companion `Stop` hook — `src/cli.ts nudge`, registered in the consuming
+project's `.claude/settings.json` — reminds you to record an ADR when a session
+produces a "decision signal": a new dependency, a new package or top-level area,
+or an infrastructure / schema file. It is deliberately gentle: non-blocking, at
+most once per session, and silent if you already touched an ADR that session. See
+[`references/reuse.md`](dotclaude_folder/skills/adrify/references/reuse.md) to
+register it.
+
+## Where records live
+
+By default records go in `docs/ADRs`. The target directory is configurable, so a
+project can keep one log at the root or distribute logs per package. The CLI
+takes the directory as an optional trailing argument; the hook honours an
+`ADR_DIR` environment variable.
+
+## The `src/cli.ts` helper
+
+`src/cli.ts` owns the deterministic mechanics, run with `npx tsx` (Node ≥20.12,
+with `commander`, `chalk`, and `zod` installed via `npm install`). The model
+writes the prose; the CLI handles numbering, scaffolding, file creation, and
+index rebuilds. Each record command takes the ADR directory as an optional
+trailing argument (default `docs/ADRs`).
+
+| Command | Purpose |
+|---|---|
+| `cli.ts scaffold [<dir>]` | Create the directory, index, meta-ADR, and template (idempotent). |
+| `cli.ts next "<title>" [<dir>]` | Print the next numbered file path without creating it. |
+| `cli.ts create "<title>" [<dir>]` | Create the next record from the template and print its path. |
+| `cli.ts list [<dir>]` | List existing records. |
+| `cli.ts reindex [<dir>]` | Rebuild the index block in `README.md` from the records. |
+| `cli.ts nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
+| `cli.ts install [<agent_folder>]` | Copy the skill into `<agent_folder>/skills/adrify/` (default `.claude`). |
+
+Run a command directly with `npx tsx src/cli.ts <command>`, or via the npm
+script: `npm run adrify -- <command>`.
+
+## Layout
+
+```
+src/
+├── cli.ts                       Commander entry; parses the subcommands below
+├── adr_store.ts                 shared mechanics: numbering, slugging, indexing
+└── commands/
+    ├── scaffold_command.ts      create the directory, template, meta-ADR, index
+    ├── next_command.ts          print the next record path
+    ├── create_command.ts        create the next record from the template
+    ├── list_command.ts          list existing records
+    ├── reindex_command.ts       rebuild the index block in README.md
+    └── nudge_command.ts         the Stop-hook nudge
+dotclaude_folder/skills/adrify/
+├── SKILL.md                     instructions Claude loads
+└── references/
+    ├── nygard_format.md         section-by-section writing guidance + examples
+    ├── backfill_guide.md        where decisions hide; the subagent brief
+    └── reuse.md                 dropping the mechanism into another project
+```
+
+## Conventions
+
+- Files are named `NNNN-kebab-title.md`, four-digit zero-padded; `0000` is the
+  meta-ADR. The CLI assigns numbers — do not hand-number.
+- One decision per record. Records are immutable; to reverse a decision, write a
+  new ADR and mark the old one `superseded by NNNN`.
+- Statuses: `proposed`, `accepted`, `deprecated`, `superseded by NNNN`.
+
+## Reusing this in another project
+
+Copy the skill prose (or run `npx tsx src/cli.ts install <target>/.claude`) and
+the `src/` CLI into the target, install the dependencies, and register the `Stop`
+hook. Full instructions are in
+[`references/reuse.md`](dotclaude_folder/skills/adrify/references/reuse.md).

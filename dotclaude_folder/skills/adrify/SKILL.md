@@ -22,7 +22,7 @@ supersedes the old one rather than editing the old one.
 
 This skill keeps three things consistent so the user can focus on the reasoning:
 sequential numbering, the index in `docs/ADRs/README.md`, and the Nygard
-structure. A bundled script owns the mechanics; you own the prose.
+structure. A bundled CLI owns the mechanics; you own the prose.
 
 ## Pick the mode from what the user asked
 
@@ -32,11 +32,13 @@ structure. A bundled script owns the mechanics; you own the prose.
 - **"set up ADRs", first use in a repo, or any mode when `docs/ADRs` is missing**
   → Scaffold first, then continue.
 
-The helper script lives next to this file. Resolve its directory from the skill
-location and always call it with the project root as the working directory:
+The mechanics are a small TypeScript CLI (`src/cli.ts`) run with `tsx` (via
+`npx tsx`), so the project must have its Node dependencies installed —
+`commander`, `chalk`, `zod`, and `tsx` (see `references/reuse.md`). Always call it
+with the project root as the working directory:
 
 ```bash
-ADR="$CLAUDE_PROJECT_DIR/.claude/skills/adrify/scripts/adrify.sh"   # adjust if reused elsewhere
+ADRIFY="$CLAUDE_PROJECT_DIR/src/cli.ts"   # adjust if reused elsewhere
 ```
 
 ## Scaffold (run once per repo)
@@ -45,7 +47,7 @@ If `docs/ADRs` has no `README.md`, create the structure before doing anything
 else:
 
 ```bash
-bash "$ADR" scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
+npx tsx "$ADRIFY" scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
 ```
 
 This is idempotent — it never overwrites existing files. After scaffolding, fill
@@ -73,14 +75,14 @@ user with a long form; have a short, focused conversation, then write the file.
      risk this creates. Honest trade-offs, not just upsides.
 3. **Create the file and write it in:**
    ```bash
-   path=$(bash "$ADR" create "<title>")   # prints docs/ADRs/NNNN-slug.md
+   path=$(npx tsx "$ADRIFY" create "<title>")   # prints docs/ADRs/NNNN-slug.md
    ```
    Then edit `$path`: set Status (usually `accepted` for a decision being made
    now, `proposed` if still under discussion), today's date, deciders, and the
    three sections.
 4. **Rebuild the index** so `docs/ADRs/README.md` lists the new record:
    ```bash
-   bash "$ADR" reindex      # regenerates the index block from the files
+   npx tsx "$ADRIFY" reindex      # regenerates the index block from the files
    ```
 5. **Show the user the finished record** and confirm.
 
@@ -104,16 +106,16 @@ curation is the point.
    one-line title and a one-line "why it's a decision". Let the user cull, merge,
    rename, and reorder. This list is the deliverable of this step.
 4. **Write the approved ones**, lowest number first, each via
-   `bash "$ADR" create "<title>"` then editing the file. Use Status `accepted`
+   `npx tsx "$ADRIFY" create "<title>"` then editing the file. Use Status `accepted`
    (these are decisions already in force) and date them with the project's start
    or the decision's best-known date, noting in Context that the record was
    written retroactively.
-5. **Rebuild the index** once all records are written: `bash "$ADR" reindex`.
+5. **Rebuild the index** once all records are written: `npx tsx "$ADRIFY" reindex`.
 
 ## Conventions (keep these stable so the log stays trustworthy)
 
 - Files: `NNNN-kebab-title.md`, four-digit zero-padded, `0000` reserved for the
-  meta-ADR. The script computes the next number — do not hand-number.
+  meta-ADR. The CLI computes the next number — do not hand-number.
 - Records are immutable. To reverse a decision, write a new ADR and set the old
   one's Status to `superseded by NNNN`; add `supersedes NNNN` on the new one.
 - Statuses: `proposed`, `accepted`, `deprecated`, `superseded by NNNN`.
@@ -121,7 +123,7 @@ curation is the point.
 
 ## Reusing this skill in another project
 
-The skill is self-contained: copy `.claude/skills/adrify/` and, for automatic
-nudges, `.claude/hooks/adrify-nudge.sh` plus its `Stop` hook entry in
-`.claude/settings.json`. The only project-specific part worth editing is the
-SIGNALS section of the hook. See `references/reuse.md`.
+Copy the skill prose (`.claude/skills/adrify/`) and the `src/` CLI into the
+target, install the dependencies, and register `src/cli.ts nudge` as a `Stop`
+hook in `.claude/settings.json`. The only project-specific part worth editing is
+the SIGNALS section of the nudge command. See `references/reuse.md`.
