@@ -1,6 +1,6 @@
 import Fs from 'node:fs';
 import Path from 'node:path';
-import { AdrStore } from '../adr_store.js';
+import { AdrStore } from '../misc/adr_store.js';
 
 /** `reindex` — rebuild the index block in README.md from the record files. */
 export class ReindexCommand {

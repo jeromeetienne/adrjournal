@@ -1,7 +1,7 @@
 import Fs from 'node:fs';
 import Path from 'node:path';
 
-/** Outcome of copying a single skill file into the agent folder. */
+/** Outcome of copying a single agent file into the destination folder. */
 export type InstalledFile = {
 	name: string;
 	action: 'created' | 'updated';
@@ -14,19 +14,20 @@ export type InstallResult = {
 	files: InstalledFile[];
 };
 
-/** `install` — copy the bundled adrify skill into a Claude Code agent folder. */
+/** `install` — copy the bundled agent files into a Claude Code agent folder. */
 export class InstallCommand {
 	/**
-	 * Copy every bundled skill file into `<agentFolder>/skills/adrify/`.
-	 * @param agentFolder Target `.claude` directory (project- or user-level).
+	 * Copy every bundled agent file into `agentFolder` (the agent directory, e.g.
+	 * `.claude`), preserving the relative layout, to set the skill up in a target.
+	 * @param agentFolder Destination agent folder; the caller defaults it to `.`.
 	 * @returns The destination directory and the per-file outcome.
 	 */
 	static async install(agentFolder: string): Promise<InstallResult> {
-		const sourceDir = Path.join(import.meta.dirname, '..', '..', 'dotclaude_folder', 'skills', 'adrify');
+		const sourceDir = Path.join(import.meta.dirname, '..', '..', 'dotclaude_folder');
 		if (Fs.existsSync(sourceDir) === false) {
-			throw new Error(`bundled skill not found at ${sourceDir}`);
+			throw new Error(`bundled agent files not found at ${sourceDir}`);
 		}
-		const destinationDir = Path.join(Path.resolve(agentFolder), 'skills', 'adrify');
+		const destinationDir = Path.resolve(agentFolder);
 		const files: InstalledFile[] = [];
 		for (const name of InstallCommand.listFiles(sourceDir)) {
 			const destination = Path.join(destinationDir, name);

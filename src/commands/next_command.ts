@@ -1,5 +1,5 @@
 import Path from 'node:path';
-import { AdrStore } from '../adr_store.js';
+import { AdrStore } from '../misc/adr_store.js';
 
 /** `next` — print the path of the next record without creating it. */
 export class NextCommand {

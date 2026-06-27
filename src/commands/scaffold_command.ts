@@ -1,6 +1,6 @@
 import Fs from 'node:fs';
 import Path from 'node:path';
-import { AdrStore } from '../adr_store.js';
+import { AdrStore } from '../misc/adr_store.js';
 
 /** Per-record template written by `scaffold`. The first line is rewritten on `create`. */
 const TEMPLATE_MD = `# NNNN. <Short title of the decision>

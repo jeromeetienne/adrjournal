@@ -1,6 +1,6 @@
 import Fs from 'node:fs';
 import Path from 'node:path';
-import { AdrStore } from '../adr_store.js';
+import { AdrStore } from '../misc/adr_store.js';
 
 /** `create` — create the next record from the template and print its path. */
 export class CreateCommand {

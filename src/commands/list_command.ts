@@ -1,5 +1,5 @@
 import Path from 'node:path';
-import { AdrStore } from '../adr_store.js';
+import { AdrStore } from '../misc/adr_store.js';
 
 /** `list` — list existing records, one path per line. */
 export class ListCommand {

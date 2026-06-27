@@ -9,7 +9,8 @@
 	},
 	"scripts": {
 		"adrify": "tsx src/cli.ts",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"build": "tsc -p tsconfig.build.json"
 	},
 	"author": {
 		"name": "Jerome Etienne",

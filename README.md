@@ -61,7 +61,7 @@ trailing argument (default `docs/ADRs`).
 | `cli.ts list [<dir>]` | List existing records. |
 | `cli.ts reindex [<dir>]` | Rebuild the index block in `README.md` from the records. |
 | `cli.ts nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
-| `cli.ts install [<agent_folder>]` | Copy the skill into `<agent_folder>/skills/adrify/` (default `.claude`). |
+| `cli.ts install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
 
 Run a command directly with `npx tsx src/cli.ts <command>`, or via the npm
 script: `npm run adrify -- <command>`.
@@ -71,14 +71,16 @@ script: `npm run adrify -- <command>`.
 ```
 src/
 ├── cli.ts                       Commander entry; parses the subcommands below
-├── adr_store.ts                 shared mechanics: numbering, slugging, indexing
+├── misc/
+│   └── adr_store.ts             shared mechanics: numbering, slugging, indexing
 └── commands/
     ├── scaffold_command.ts      create the directory, template, meta-ADR, index
     ├── next_command.ts          print the next record path
     ├── create_command.ts        create the next record from the template
     ├── list_command.ts          list existing records
     ├── reindex_command.ts       rebuild the index block in README.md
-    └── nudge_command.ts         the Stop-hook nudge
+    ├── nudge_command.ts         the Stop-hook nudge
+    └── install_command.ts       copy the agent files into a target agent folder
 dotclaude_folder/skills/adrify/
 ├── SKILL.md                     instructions Claude loads
 └── references/

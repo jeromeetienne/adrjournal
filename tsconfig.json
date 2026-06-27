@@ -3,8 +3,6 @@
 		"target": "ES2020",
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
-		"lib": ["ES2020"],
-		"types": ["node"],
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -12,7 +10,15 @@
 		"forceConsistentCasingInFileNames": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noEmit": true
+		"noEmit": true,
+		"outDir": "./dist",
+		"rootDir": ".",
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"types": ["node"]
 	},
-	"include": ["src/**/*.ts"]
+	"include": [
+		"src/**/*.ts"
+	],
 }

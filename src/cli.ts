@@ -72,8 +72,8 @@ async function main(): Promise<void> {
 
 	program
 		.command('install')
-		.description('Copy the bundled adrify skill into <agent_folder>/skills/adrify/')
-		.argument('[agent_folder]', 'Target Claude agent folder', '.claude')
+		.description('Copy the bundled agent files into the target agent folder (e.g. .claude)')
+		.argument('[agent_folder]', 'Destination agent folder', '.')
 		.action(async (agentFolder: string) => {
 			const result = await InstallCommand.install(agentFolder);
 			for (const file of result.files) {
