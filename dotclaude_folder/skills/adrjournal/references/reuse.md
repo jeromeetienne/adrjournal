@@ -1,6 +1,6 @@
 # Reusing the ADR mechanism in another project
 
-The skill is the prose in `dotclaude_folder/skills/adrify/` plus the TypeScript
+The skill is the prose in `dotclaude_folder/skills/adrjournal/` plus the TypeScript
 CLI in `src/` (`cli.ts` and `commands/`). To add the mechanism to a different
 repository:
 
@@ -8,13 +8,13 @@ repository:
 
 ```bash
 # from this repo into the target repo
-cp -r dotclaude_folder/skills/adrify   <target>/.claude/skills/adrify
+cp -r dotclaude_folder/skills/adrjournal   <target>/.claude/skills/adrjournal
 cp -r src                              <target>/src        # cli.ts + commands/
 ```
 
 The skill prose can also be copied with the bundled command —
 `npx tsx src/cli.ts install <target>/.claude` writes it into
-`<target>/.claude/skills/adrify/`. You still need the `src/` CLI and its
+`<target>/.claude/skills/adrjournal/`. You still need the `src/` CLI and its
 dependencies (below). Adjust the destinations to taste — the only hard
 requirement is that the path you give the skill and the hook resolves to
 `cli.ts`.

@@ -1,4 +1,4 @@
-# adrify — Architecture Decision Records skill
+# adrjournal — Architecture Decision Records skill
 
 A Claude Code skill for recording and maintaining Architecture Decision Records
 (ADRs) in Michael Nygard's format:
@@ -10,7 +10,7 @@ decision: the **context** that forced it, the **decision** itself, and its
 supersedes the old one rather than editing it.
 
 The skill prose lives in
-[`dotclaude_folder/skills/adrify/`](dotclaude_folder/skills/adrify); its
+[`dotclaude_folder/skills/adrjournal/`](dotclaude_folder/skills/adrjournal); its
 deterministic mechanics live in [`src/`](src) as a small TypeScript CLI.
 
 ## What it does
@@ -22,11 +22,11 @@ reasoning. It has three modes, chosen from how you ask:
 | You say | Mode | What happens |
 |---|---|---|
 | "set up ADRs", first use in a repo | **scaffold** | Creates the ADR directory with an index, a template, and the `0000` meta-ADR. |
-| "record this decision", "write an ADR for X", `/adrify new` | **interview** | A short, focused Q&A, then writes one record. |
-| "catalog our decisions", "document what we've built", `/adrify backfill` | **backfill** | Fans out subagents to mine existing docs and code, proposes a candidate list for you to curate, then writes the approved records. |
+| "record this decision", "write an ADR for X", `/adrjournal new` | **interview** | A short, focused Q&A, then writes one record. |
+| "catalog our decisions", "document what we've built", `/adrjournal backfill` | **backfill** | Fans out subagents to mine existing docs and code, proposes a candidate list for you to curate, then writes the approved records. |
 
-Invoke it by asking Claude in plain language, or with `/adrify`, `/adrify new`,
-`/adrify backfill`.
+Invoke it by asking Claude in plain language, or with `/adrjournal`, `/adrjournal new`,
+`/adrjournal backfill`.
 
 ## Automatic capture going forward
 
@@ -35,7 +35,7 @@ project's `.claude/settings.json` — reminds you to record an ADR when a sessio
 produces a "decision signal": a new dependency, a new package or top-level area,
 or an infrastructure / schema file. It is deliberately gentle: non-blocking, at
 most once per session, and silent if you already touched an ADR that session. See
-[`references/reuse.md`](dotclaude_folder/skills/adrify/references/reuse.md) to
+[`references/reuse.md`](dotclaude_folder/skills/adrjournal/references/reuse.md) to
 register it.
 
 ## Where records live
@@ -64,7 +64,7 @@ trailing argument (default `docs/ADRs`).
 | `cli.ts install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
 
 Run a command directly with `npx tsx src/cli.ts <command>`, or via the npm
-script: `npm run adrify -- <command>`.
+script: `npm run adrjournal -- <command>`.
 
 ## Layout
 
@@ -81,7 +81,7 @@ src/
     ├── reindex_command.ts       rebuild the index block in README.md
     ├── nudge_command.ts         the Stop-hook nudge
     └── install_command.ts       copy the agent files into a target agent folder
-dotclaude_folder/skills/adrify/
+dotclaude_folder/skills/adrjournal/
 ├── SKILL.md                     instructions Claude loads
 └── references/
     ├── nygard_format.md         section-by-section writing guidance + examples
@@ -102,4 +102,4 @@ dotclaude_folder/skills/adrify/
 Copy the skill prose (or run `npx tsx src/cli.ts install <target>/.claude`) and
 the `src/` CLI into the target, install the dependencies, and register the `Stop`
 hook. Full instructions are in
-[`references/reuse.md`](dotclaude_folder/skills/adrify/references/reuse.md).
+[`references/reuse.md`](dotclaude_folder/skills/adrjournal/references/reuse.md).

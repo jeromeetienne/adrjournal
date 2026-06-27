@@ -16,7 +16,7 @@
 		"node": ">=20.12"
 	},
 	"scripts": {
-		"adrify": "tsx src/cli.ts",
+		"adrjournal": "tsx src/cli.ts",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",
 		"prepublishOnly": "npm run build",

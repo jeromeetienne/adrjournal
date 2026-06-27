@@ -25,7 +25,7 @@ const DEPENDENCY_BLOCKS = ['dependencies', 'devDependencies', 'peerDependencies'
 const BOUNDARY_PATTERN = /(^|\/)(dockerfile|docker-compose\.ya?ml|.*\.tf|.*\.proto)$|(^|\/)(migrations|schema)(\/|$)/i;
 
 /**
- * Stop-hook companion to the adrify skill. When a session produces a "decision
+ * Stop-hook companion to the adrjournal skill. When a session produces a "decision
  * signal" — a new dependency, a new top-level area, or an infrastructure/schema
  * file — it prints a gentle, non-blocking reminder to record an ADR. It fires at
  * most once per session and stays silent when an ADR was already touched.
@@ -52,7 +52,7 @@ export class NudgeCommand {
 		const cwd = input.cwd !== undefined && input.cwd !== '' ? input.cwd : process.cwd();
 		const sessionId = input.session_id !== undefined && input.session_id !== '' ? input.session_id : 'nosession';
 		const adrDir = process.env.ADR_DIR !== undefined && process.env.ADR_DIR !== '' ? process.env.ADR_DIR : 'docs/ADRs';
-		const marker = Path.join(Os.tmpdir(), `claude-adrify-nudge-${sessionId}`);
+		const marker = Path.join(Os.tmpdir(), `claude-adrjournal-nudge-${sessionId}`);
 
 		// Already nudged this session, not a git repo, or an ADR is already being touched.
 		if (Fs.existsSync(marker) === true) {
@@ -76,7 +76,7 @@ export class NudgeCommand {
 		}
 
 		Fs.writeFileSync(marker, '');
-		const message = `This session looks like it made an architectural decision (${reason}). Consider running /adrify new to record it.`;
+		const message = `This session looks like it made an architectural decision (${reason}). Consider running /adrjournal new to record it.`;
 		process.stdout.write(`${JSON.stringify({ systemMessage: message })}\n`);
 	}
 

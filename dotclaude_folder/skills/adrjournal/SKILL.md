@@ -1,5 +1,5 @@
 ---
-name: adrify
+name: adrjournal
 description: >-
   Record and maintain Architecture Decision Records (ADRs) in Nygard format
   under docs/ADRs. Use this whenever the user wants to document an architecture
@@ -38,7 +38,7 @@ The mechanics are a small TypeScript CLI (`src/cli.ts`) run with `tsx` (via
 with the project root as the working directory:
 
 ```bash
-ADRIFY="$CLAUDE_PROJECT_DIR/src/cli.ts"   # adjust if reused elsewhere
+ADRJOURNAL="$CLAUDE_PROJECT_DIR/src/cli.ts"   # adjust if reused elsewhere
 ```
 
 ## Scaffold (run once per repo)
@@ -47,7 +47,7 @@ If `docs/ADRs` has no `README.md`, create the structure before doing anything
 else:
 
 ```bash
-npx tsx "$ADRIFY" scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
+npx tsx "$ADRJOURNAL" scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
 ```
 
 This is idempotent — it never overwrites existing files. After scaffolding, fill
@@ -75,14 +75,14 @@ user with a long form; have a short, focused conversation, then write the file.
      risk this creates. Honest trade-offs, not just upsides.
 3. **Create the file and write it in:**
    ```bash
-   path=$(npx tsx "$ADRIFY" create "<title>")   # prints docs/ADRs/NNNN-slug.md
+   path=$(npx tsx "$ADRJOURNAL" create "<title>")   # prints docs/ADRs/NNNN-slug.md
    ```
    Then edit `$path`: set Status (usually `accepted` for a decision being made
    now, `proposed` if still under discussion), today's date, deciders, and the
    three sections.
 4. **Rebuild the index** so `docs/ADRs/README.md` lists the new record:
    ```bash
-   npx tsx "$ADRIFY" reindex      # regenerates the index block from the files
+   npx tsx "$ADRJOURNAL" reindex      # regenerates the index block from the files
    ```
 5. **Show the user the finished record** and confirm.
 
@@ -106,11 +106,11 @@ curation is the point.
    one-line title and a one-line "why it's a decision". Let the user cull, merge,
    rename, and reorder. This list is the deliverable of this step.
 4. **Write the approved ones**, lowest number first, each via
-   `npx tsx "$ADRIFY" create "<title>"` then editing the file. Use Status `accepted`
+   `npx tsx "$ADRJOURNAL" create "<title>"` then editing the file. Use Status `accepted`
    (these are decisions already in force) and date them with the project's start
    or the decision's best-known date, noting in Context that the record was
    written retroactively.
-5. **Rebuild the index** once all records are written: `npx tsx "$ADRIFY" reindex`.
+5. **Rebuild the index** once all records are written: `npx tsx "$ADRJOURNAL" reindex`.
 
 ## Conventions (keep these stable so the log stays trustworthy)
 
@@ -123,7 +123,7 @@ curation is the point.
 
 ## Reusing this skill in another project
 
-Copy the skill prose (`.claude/skills/adrify/`) and the `src/` CLI into the
+Copy the skill prose (`.claude/skills/adrjournal/`) and the `src/` CLI into the
 target, install the dependencies, and register `src/cli.ts nudge` as a `Stop`
 hook in `.claude/settings.json`. The only project-specific part worth editing is
 the SIGNALS section of the nudge command. See `references/reuse.md`.
