@@ -21,7 +21,7 @@ async function main(): Promise<void> {
 
 	const program = new Command();
 	program
-		.name('adrify')
+		.name('adrjournal')
 		.description('Deterministic helpers and Stop-hook nudge for the adrify ADR skill')
 		.version(version, '-V, --version', 'output the version number');
 
