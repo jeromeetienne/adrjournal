@@ -30,7 +30,7 @@ Invoke it by asking Claude in plain language, or with `/adrjournal`, `/adrjourna
 
 ## Automatic capture going forward
 
-A companion `Stop` hook — `src/cli.ts nudge`, registered in the consuming
+A companion `Stop` hook — `npx adrjournal nudge`, registered in the consuming
 project's `.claude/settings.json` — reminds you to record an ADR when a session
 produces a "decision signal": a new dependency, a new package or top-level area,
 or an infrastructure / schema file. It is deliberately gentle: non-blocking, at
@@ -45,26 +45,27 @@ project can keep one log at the root or distribute logs per package. The CLI
 takes the directory as an optional trailing argument; the hook honours an
 `ADR_DIR` environment variable.
 
-## The `src/cli.ts` helper
+## The `adrjournal` CLI
 
-`src/cli.ts` owns the deterministic mechanics, run with `npx tsx` (Node ≥20.12,
-with `commander`, `chalk`, and `zod` installed via `npm install`). The model
-writes the prose; the CLI handles numbering, scaffolding, file creation, and
-index rebuilds. Each record command takes the ADR directory as an optional
-trailing argument (default `docs/ADRs`).
+The published [`adrjournal`](https://www.npmjs.com/package/adrjournal) CLI owns
+the deterministic mechanics, run with `npx` (Node ≥20.12). The model writes the
+prose; the CLI handles numbering, scaffolding, file creation, and index rebuilds.
+Each record command takes the ADR directory as an optional trailing argument
+(default `docs/ADRs`).
 
 | Command | Purpose |
 |---|---|
-| `cli.ts scaffold [<dir>]` | Create the directory, index, meta-ADR, and template (idempotent). |
-| `cli.ts next "<title>" [<dir>]` | Print the next numbered file path without creating it. |
-| `cli.ts create "<title>" [<dir>]` | Create the next record from the template and print its path. |
-| `cli.ts list [<dir>]` | List existing records. |
-| `cli.ts reindex [<dir>]` | Rebuild the index block in `README.md` from the records. |
-| `cli.ts nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
-| `cli.ts install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
+| `adrjournal scaffold [<dir>]` | Create the directory, index, meta-ADR, and template (idempotent). |
+| `adrjournal next "<title>" [<dir>]` | Print the next numbered file path without creating it. |
+| `adrjournal create "<title>" [<dir>]` | Create the next record from the template and print its path. |
+| `adrjournal list [<dir>]` | List existing records. |
+| `adrjournal reindex [<dir>]` | Rebuild the index block in `README.md` from the records. |
+| `adrjournal nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
+| `adrjournal install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
 
-Run a command directly with `npx tsx src/cli.ts <command>`, or via the npm
-script: `npm run adrjournal -- <command>`.
+Run any command with `npx adrjournal <command>`. When developing in this repo you
+can also run the source directly with `npx tsx src/cli.ts <command>`, or via the
+npm script `npm run adrjournal -- <command>`.
 
 ## Layout
 
@@ -99,7 +100,7 @@ dotclaude_folder/skills/adrjournal/
 
 ## Reusing this in another project
 
-Copy the skill prose (or run `npx tsx src/cli.ts install <target>/.claude`) and
-the `src/` CLI into the target, install the dependencies, and register the `Stop`
-hook. Full instructions are in
+Run `npx adrjournal install <target>/.claude` to drop the skill prose into the
+target, then register `npx adrjournal nudge` as a `Stop` hook — no source
+checkout needed. Full instructions are in
 [`references/reuse.md`](dotclaude_folder/skills/adrjournal/references/reuse.md).

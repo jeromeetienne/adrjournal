@@ -32,14 +32,9 @@ structure. A bundled CLI owns the mechanics; you own the prose.
 - **"set up ADRs", first use in a repo, or any mode when `docs/ADRs` is missing**
   → Scaffold first, then continue.
 
-The mechanics are a small TypeScript CLI (`src/cli.ts`) run with `tsx` (via
-`npx tsx`), so the project must have its Node dependencies installed —
-`commander`, `chalk`, `zod`, and `tsx` (see `references/reuse.md`). Always call it
-with the project root as the working directory:
-
-```bash
-ADRJOURNAL="$CLAUDE_PROJECT_DIR/src/cli.ts"   # adjust if reused elsewhere
-```
+The mechanics are a published CLI, `adrjournal`, run with `npx` (Node ≥20.12). No
+local checkout or build is needed — `npx adrjournal` fetches it on demand. Always
+run it with the project root as the working directory.
 
 ## Scaffold (run once per repo)
 
@@ -47,7 +42,7 @@ If `docs/ADRs` has no `README.md`, create the structure before doing anything
 else:
 
 ```bash
-npx tsx "$ADRJOURNAL" scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
+npx adrjournal scaffold        # creates docs/ADRs/{README.md, template.md, 0000-record-architecture-decisions.md}
 ```
 
 This is idempotent — it never overwrites existing files. After scaffolding, fill
@@ -75,14 +70,14 @@ user with a long form; have a short, focused conversation, then write the file.
      risk this creates. Honest trade-offs, not just upsides.
 3. **Create the file and write it in:**
    ```bash
-   path=$(npx tsx "$ADRJOURNAL" create "<title>")   # prints docs/ADRs/NNNN-slug.md
+   path=$(npx adrjournal create "<title>")   # prints docs/ADRs/NNNN-slug.md
    ```
    Then edit `$path`: set Status (usually `accepted` for a decision being made
    now, `proposed` if still under discussion), today's date, deciders, and the
    three sections.
 4. **Rebuild the index** so `docs/ADRs/README.md` lists the new record:
    ```bash
-   npx tsx "$ADRJOURNAL" reindex      # regenerates the index block from the files
+   npx adrjournal reindex      # regenerates the index block from the files
    ```
 5. **Show the user the finished record** and confirm.
 
@@ -106,11 +101,11 @@ curation is the point.
    one-line title and a one-line "why it's a decision". Let the user cull, merge,
    rename, and reorder. This list is the deliverable of this step.
 4. **Write the approved ones**, lowest number first, each via
-   `npx tsx "$ADRJOURNAL" create "<title>"` then editing the file. Use Status `accepted`
+   `npx adrjournal create "<title>"` then editing the file. Use Status `accepted`
    (these are decisions already in force) and date them with the project's start
    or the decision's best-known date, noting in Context that the record was
    written retroactively.
-5. **Rebuild the index** once all records are written: `npx tsx "$ADRJOURNAL" reindex`.
+5. **Rebuild the index** once all records are written: `npx adrjournal reindex`.
 
 ## Conventions (keep these stable so the log stays trustworthy)
 
@@ -123,7 +118,6 @@ curation is the point.
 
 ## Reusing this skill in another project
 
-Copy the skill prose (`.claude/skills/adrjournal/`) and the `src/` CLI into the
-target, install the dependencies, and register `src/cli.ts nudge` as a `Stop`
-hook in `.claude/settings.json`. The only project-specific part worth editing is
-the SIGNALS section of the nudge command. See `references/reuse.md`.
+Install the skill prose with `npx adrjournal install <target>/.claude` and
+register `npx adrjournal nudge` as a `Stop` hook in `.claude/settings.json`. No
+source checkout is needed. See `references/reuse.md`.
