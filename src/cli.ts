@@ -86,7 +86,7 @@ async function main(): Promise<void> {
 				console.log(`${Chalk.green(file.action)} ${file.destination}`);
 			}
 			console.log(Chalk.bold(`\n${result.files.length} file(s) → ${result.destinationDir}`));
-			console.log('Next: install the CLI dependencies and register the Stop hook — see references/reuse.md.');
+			console.log('Next: register `npx adrjournal nudge` as a Stop hook — see references/reuse.md.');
 		});
 
 	await program.parseAsync(process.argv);

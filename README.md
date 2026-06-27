@@ -59,7 +59,7 @@ Each record command takes the ADR directory as an optional trailing argument
 | `adrjournal next "<title>" [<dir>]` | Print the next numbered file path without creating it. |
 | `adrjournal create "<title>" [<dir>]` | Create the next record from the template and print its path. |
 | `adrjournal list [<dir>]` | List existing records. |
-| `adrjournal reindex [<dir>]` | Rebuild the index block in `README.md` from the records. |
+| `adrjournal reindex [<dir>]` | Rebuild the index block in the ADR directory's `README.md` from the records. |
 | `adrjournal nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
 | `adrjournal install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
 
