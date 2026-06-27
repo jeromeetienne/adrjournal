@@ -105,9 +105,9 @@ dotclaude_folder/skills/adrjournal/
 
 A short series on why adrjournal exists and how it's designed:
 
-1. [adrjournal: Your codebase is full of decisions nobody wrote down](docs/blog_posts/part-1-decisions-nobody-wrote-down.md)
-2. [adrjournal: Stop asking the model to count (the code-vs-model split)](docs/blog_posts/part-2-stop-asking-the-model-to-count.md)
-3. [adrjournal: Designing a nudge that helps without nagging](docs/blog_posts/part-3-a-nudge-that-helps-without-nagging.md)
+1. [adrjournal: Your Codebase Is Full of Decisions Nobody Wrote Down](docs/blog_posts/part-1-decisions-nobody-wrote-down.md)
+2. [adrjournal: Stop Asking the Model to Count (The Code-vs-Model Split)](docs/blog_posts/part-2-stop-asking-the-model-to-count.md)
+3. [adrjournal: Designing a Nudge That Helps Without Nagging](docs/blog_posts/part-3-a-nudge-that-helps-without-nagging.md)
 
 ## Reusing this in another project
 
