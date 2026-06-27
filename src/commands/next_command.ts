@@ -5,6 +5,6 @@ import { AdrStore } from '../misc/adr_store.js';
 export class NextCommand {
 	/** Path of the next record for `title`, WITHOUT creating it. */
 	static next(title: string, adrDir: string): string {
-		return Path.join(adrDir, `${AdrStore.nextNumber(adrDir)}-${AdrStore.slugify(title)}.md`);
+		return Path.join(adrDir, `${AdrStore.nextNumber(adrDir)}-${AdrStore.requireSlug(title)}.md`);
 	}
 }

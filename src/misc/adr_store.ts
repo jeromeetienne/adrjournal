@@ -19,6 +19,20 @@ export class AdrStore {
 			.replace(/-+$/, '');
 	}
 
+	/**
+	 * Slug for `title`, or throw `title required` when it has no usable
+	 * characters. Catches empty (`''`) and symbol-only (`'!!!'`) titles, both of
+	 * which slug to an empty string and would otherwise yield a malformed
+	 * `NNNN-.md` record.
+	 */
+	static requireSlug(title: string): string {
+		const slug = AdrStore.slugify(title);
+		if (slug === '') {
+			throw new Error('title required');
+		}
+		return slug;
+	}
+
 	/** Basenames of the `NNNN-*.md` records in `adrDir`, sorted ascending. */
 	static recordFiles(adrDir: string): string[] {
 		if (Fs.existsSync(adrDir) === false) {

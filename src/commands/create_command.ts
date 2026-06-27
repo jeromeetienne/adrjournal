@@ -6,9 +6,10 @@ import { AdrStore } from '../misc/adr_store.js';
 export class CreateCommand {
 	/** Create the next record for `title` from the template and return its path. */
 	static create(title: string, adrDir: string): string {
+		const slug = AdrStore.requireSlug(title);
 		Fs.mkdirSync(adrDir, { recursive: true });
 		const number = AdrStore.nextNumber(adrDir);
-		const filePath = Path.join(adrDir, `${number}-${AdrStore.slugify(title)}.md`);
+		const filePath = Path.join(adrDir, `${number}-${slug}.md`);
 		const templatePath = Path.join(adrDir, 'template.md');
 		if (Fs.existsSync(templatePath) === true) {
 			const template = Fs.readFileSync(templatePath, 'utf-8');
