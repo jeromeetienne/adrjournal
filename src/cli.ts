@@ -86,7 +86,13 @@ async function main(): Promise<void> {
 				console.log(`${Chalk.green(file.action)} ${file.destination}`);
 			}
 			console.log(Chalk.bold(`\n${result.files.length} file(s) → ${result.destinationDir}`));
-			console.log('Next: register `npx adrjournal nudge` as a Stop hook — see references/reuse.md.');
+			if (result.hook.status === 'added') {
+				console.log(`${Chalk.green('hook')} Stop hook \`npx adrjournal nudge\` registered in ${result.hook.settingsPath}`);
+			} else if (result.hook.status === 'present') {
+				console.log(`${Chalk.green('hook')} Stop hook \`npx adrjournal nudge\` already registered in ${result.hook.settingsPath}`);
+			} else {
+				console.log('hook skipped: target is not a .claude folder — see references/reuse.md to register the nudge manually.');
+			}
 		});
 
 	await program.parseAsync(process.argv);

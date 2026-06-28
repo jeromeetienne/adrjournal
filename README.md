@@ -73,7 +73,7 @@ Each record command takes the ADR directory as an optional trailing argument
 | `adrjournal list [<dir>]` | List existing records. |
 | `adrjournal reindex [<dir>]` | Rebuild the index block in the ADR directory's `README.md` from the records. |
 | `adrjournal nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
-| `adrjournal install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`). |
+| `adrjournal install [<agent_folder>]` | Copy the bundled agent files into the agent folder (default `.`, e.g. `.claude`); when the target is a `.claude` folder, also register the `npx adrjournal nudge` Stop hook in its `settings.json` (idempotent, non-destructive). |
 
 Run any command with `npx adrjournal <command>`. When developing in this repo you
 can also run the source directly with `npx tsx src/cli.ts <command>`, or via the
@@ -116,6 +116,6 @@ dotclaude_folder/skills/adrjournal/
 ## Reusing this in another project
 
 Run `npx adrjournal install <target>/.claude` to drop the skill prose into the
-target, then register `npx adrjournal nudge` as a `Stop` hook — no source
+target and auto-register `npx adrjournal nudge` as a `Stop` hook — no source
 checkout needed. Full instructions are in
 [`references/reuse.md`](dotclaude_folder/skills/adrjournal/references/reuse.md).

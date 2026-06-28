@@ -19,6 +19,15 @@ first so `npx` has a `package.json` to work from.
 
 ## 2. Register the Stop hook
 
+When the install target is a `.claude` folder, step 1 registers the
+`npx adrjournal nudge` Stop hook automatically: it merges the entry into
+`.claude/settings.json` (creating the file if absent), preserves any existing
+settings and hooks, and is idempotent — re-running `install` reports the hook as
+already present rather than duplicating it. The CLI prints the outcome
+(`registered` / `already registered` / `skipped`).
+
+You only need the manual merge below as a fallback — for a non-`.claude` target,
+or to hand-tune the entry (for example, adding an `ADR_DIR` override per step 4).
 Merge this into the target's `.claude/settings.json` (create the file if absent;
 keep any existing hooks):
 
