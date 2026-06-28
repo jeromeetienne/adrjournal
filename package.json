@@ -1,6 +1,6 @@
 {
 	"name": "adrjournal",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Architecture Decision Records skill for Claude Code — deterministic ADR helpers and a Stop-hook nudge.",
 	"type": "module",
 	"bin": {
